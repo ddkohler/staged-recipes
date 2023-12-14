@@ -1,0 +1,51 @@
+{% set name = "yaqg-ni" %}
+{% set version = "2023.12.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/yaqg_ni-{{ version }}.tar.gz
+  sha256: 57c973024ec4928ea12b10eb969731fd600b62ddf072e95370d145d61166227f
+
+build:
+  entry_points:
+    - yaqd-ni-daqmx-tmux-gui = yaqg_ni._ni_daqmx_tmux_gui:main
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+
+requirements:
+  host:
+    - python >=3.7
+    - flit-core >=2,<4
+    - pip
+  run:
+    - python >=3.7
+    - yaqc
+    - pyqtgraph
+    - qtypes
+    - qtpy
+    - numpy
+    - tomli
+
+test:
+  imports:
+    - yaqg_ni
+  commands:
+    - pip check
+    - yaqd-ni-daqmx-tmux-gui --help
+  requires:
+    - pip
+
+about:
+  home: https://yaq.fyi
+  summary: qt-based gui for yaqd-ni daemons
+  dev_url: https://github.com/yaq-project/yaqd-ni/
+  license: LGPL-3.0
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - ddkohler
